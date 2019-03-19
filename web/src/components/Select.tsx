@@ -13,9 +13,11 @@ const Select: React.SFC<Props> = ({
   ...props
 }): React.ReactElement => (
   <select value={toString(value)} onChange={event => onChange(toValue(event.target.value), event)} {...props}>
-    <option value={toString(null)} disabled>
-      {placeholder || '선택하세요'}
-    </option>
+    {value === null ? (
+      <option value={toString(null)} disabled>
+        {placeholder || '선택하세요.'}
+      </option>
+    ) : null}
     {[{ id: null, title: '미분류' }, ...groups].map(group =>
       group.id === null ? (
         <React.Fragment key={`group-${group.id}`}>

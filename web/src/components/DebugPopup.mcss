@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-family: monospace;
+}
+
+.heading {
+  margin: 0;
+  padding: 10px;
+  font-size: 1em;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.content {
+  flex-grow: 1;
+  margin: 0;
+  padding: 10px;
+  font-size: 0.9em;
+  overflow-y: scroll;
+}
