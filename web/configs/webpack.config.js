@@ -2,7 +2,7 @@ const path = require('path');
 const decamelize = require('decamelize');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { flow } = require('lodash');
-const { mapKeys, mapValues } = require('lodash/fp');
+const { defaults, mapKeys, mapValues } = require('lodash/fp');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { DefinePlugin } = require('webpack');
 const postcssConfig = require('./postcss.config');
@@ -120,6 +120,9 @@ module.exports = env => ({
     }),
     new DefinePlugin(
       flow(
+        defaults({
+          serverUri: 'ws://127.0.0.1:9000',
+        }),
         mapKeys(key => decamelize(key)),
         mapKeys(key => key.toUpperCase()),
         mapValues(value => JSON.stringify(value)),
