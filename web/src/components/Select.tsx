@@ -1,8 +1,8 @@
 import React from 'react';
-import { noop, isVoid } from '../utils/misc';
+import { noop } from '../utils/misc';
 
 const toValue = (stringValue: string): string | null => (stringValue === '' ? null : stringValue);
-const toString = (value: string | null): string => (isVoid(value) ? '' : (value as string));
+const toString = (value: string | null): string => (value === null ? '' : value);
 
 const Select: React.SFC<Props> = ({
   groups = [],
@@ -18,11 +18,11 @@ const Select: React.SFC<Props> = ({
         {placeholder || '선택하세요.'}
       </option>
     ) : null}
-    {[{ id: null, title: '미분류' }, ...groups].map(group =>
+    {[{ id: null }, ...groups].map(group =>
       group.id === null ? (
         <React.Fragment key={`group-${group.id}`}>
           {items
-            .filter(item => isVoid(item.group))
+            .filter(item => item.group === null || item.group === undefined)
             .map(item => (
               <option key={item.id} value={item.id} disabled={item.disabled}>
                 {item.title}

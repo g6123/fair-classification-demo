@@ -34,6 +34,7 @@
     "prettier/prettier": "warn"
   },
   "globals": {
-    "__webpack_public_path__": true
+    "__webpack_public_path__": true,
+    "SERVER_URI": true
   }
 }

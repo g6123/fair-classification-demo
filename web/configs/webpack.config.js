@@ -132,4 +132,5 @@ module.exports = env => ({
   devServer: {
     historyApiFallback: true,
   },
+  devtool: 'inline-source-map',
 });
