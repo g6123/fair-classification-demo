@@ -1,0 +1,56 @@
+@import '../_variables.css';
+
+.container {
+  display: flex;
+  width: 1600px;
+  height: 800px;
+  margin: 20px auto;
+  padding: 0 10px;
+  box-sizing: border-box;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.column {
+  margin-left: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+
+  & .heading {
+    font-size: 1.1em;
+    margin: 20px 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.column.left {
+  width: 300px;
+  flex-shrink: 0;
+
+  & .select {
+    width: 100%;
+  }
+}
+
+.column.middle {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.column.right {
+  width: 300px;
+  flex-shrink: 0;
+}
