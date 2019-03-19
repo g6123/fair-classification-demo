@@ -1,0 +1,19 @@
+@import '../_variables.css';
+
+.container {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  width: var(--content-width);
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 1.3em;
+}

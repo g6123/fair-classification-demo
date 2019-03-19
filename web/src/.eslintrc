@@ -1,0 +1,38 @@
+{
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended",
+    "prettier/react",
+    "prettier/@typescript-eslint"
+  ],
+  "plugins": ["react-hooks"],
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
+  "env": {
+    "browser": true,
+    "node": false,
+    "es6": true
+  },
+  "rules": {
+    "@typescript-eslint/camelcase": ["warn", { "allow": ["__webpack_public_path__"] }],
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "no-console": "warn",
+    "import/order": ["warn", { "newlines-between": "never" }],
+    "react/prop-types": "off",
+    "prettier/prettier": "warn"
+  },
+  "globals": {
+    "__webpack_public_path__": true
+  }
+}

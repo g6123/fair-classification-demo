@@ -1,0 +1,14 @@
+@import '../_variables.css';
+
+.button {
+  display: block;
+  padding: 10px 20px;
+  font-weight: bold;
+  background-color: white;
+  border: none;
+}
+
+.button.primary {
+  color: white;
+  background-color: var(--accent-color);
+}
