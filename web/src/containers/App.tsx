@@ -1,26 +1,24 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { observer } from 'mobx-react-lite';
 import AppBar from '../components/AppBar';
 import Splash from '../components/Splash';
-import useEngine from '../domain/engine';
+import { useSocket } from '../stores/socket';
 import AppContent from './AppContent';
+import AppRouter from './AppRouter';
 
 const App: React.SFC = (): React.ReactElement => {
-  const status = useEngine();
+  const socket = useSocket();
 
   return (
     <React.Fragment>
-      <Splash status={status} />
-      <Router basename={__webpack_public_path__}>
-        <React.Fragment>
-          <AppBar>Fair Classification Demo</AppBar>
-          <AppContent />
-        </React.Fragment>
-      </Router>
+      <AppRouter>
+        <AppBar>Fair Classification Demo</AppBar>
+        {socket.status === WebSocket.OPEN ? <AppContent /> : <Splash status={socket.status} />}
+      </AppRouter>
       <ToastContainer position="bottom-center" />
     </React.Fragment>
   );
 };
 
-export default App;
+export default observer(App);

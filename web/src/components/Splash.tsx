@@ -16,11 +16,18 @@ const Splash: React.SFC<Props> = ({ status, className, ...props }): React.ReactE
   }, [status]);
 
   return (
-    <div className={cx(classes.container, { [classes.hidden]: status === WebSocket.OPEN }, className)} {...props}>
-      {status === WebSocket.CLOSED ? <LoaderError /> : <Loader />}
-      <div className={classes.message}>
-        {status === WebSocket.CLOSED ? '서버에 연결할 수 없습니다.' : '서버에 연결하는 중입니다.'}
-      </div>
+    <div className={cx(classes.container, className)} {...props}>
+      {status === WebSocket.CLOSED ? (
+        <React.Fragment>
+          <LoaderError />
+          <div className={classes.message}>서버에 연결할 수 없습니다.</div>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <Loader />
+          <div className={classes.message}>서버에 연결하는 중입니다.</div>
+        </React.Fragment>
+      )}
     </div>
   );
 };
