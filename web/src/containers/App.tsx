@@ -23,5 +23,6 @@ const App: React.SFC = (): React.ReactElement => {
     <ToastContainer position="bottom-center" />
   </React.Fragment>
 );
+};
 
 export default App;
