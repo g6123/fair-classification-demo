@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import SchemaForm from 'react-jsonschema-form';
 import { AutoSizer, Table, Column } from 'react-virtualized';
 import { observer, Observer } from 'mobx-react-lite';
+import { toast } from 'react-toastify';
 import cx from 'classnames';
 import Select from '../components/Select';
 import Checkbox from '../components/Checkbox';
@@ -15,14 +16,62 @@ import { useSocket } from '../stores/socket';
 import { capitalize } from '../utils/misc';
 import classes from './MainUI.mcss';
 
+const color = (y: number, y_: number): string => {
+  if (y && y_) {
+    return '#00c4dd';
+  } else if (y && !y_) {
+    return '#c9f9ff';
+  } else if (!y && y_) {
+    return '#ffcfc9';
+  } else if (!y && !y_) {
+    return '#dd1900';
+  } else {
+    return '';
+  }
+};
+
 const MainUI = (): React.ReactElement => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const tableRef = useRef<Table>(null);
+
   const options = useOptions();
   const dataset = useDataset();
 
-  const socket = useSocket(message => {
-    if (message.type === 'dataset') {
-      dataset.columns = message.columns;
-      dataset.data = message.data;
+  const socket = useSocket(action => {
+    switch (action.type) {
+      case 'SET_DATASET': {
+        dataset.columns = action.columns;
+        dataset.data = action.data;
+        break;
+      }
+
+      case 'SET_POINTS': {
+        dataset.predictions = action.predictions;
+        dataset.grounds = action.grounds;
+
+        if (tableRef.current !== null) {
+          tableRef.current.forceUpdateGrid();
+        }
+
+        const node = canvasRef.current as HTMLCanvasElement;
+        const context = node.getContext('2d') as CanvasRenderingContext2D;
+
+        for (let i = 0; i < action.predictions.length; i++) {
+          const y = action.grounds[i];
+          const y_ = action.predictions[i];
+          const ps = action.positions[i].map((p: number) => (p + 1) / 2);
+
+          context.fillStyle = color(y, y_);
+          context.fillRect(ps[0] * node.width, ps[1] * node.height, 3, 3);
+        }
+
+        break;
+      }
+
+      case 'SET_ERROR': {
+        toast(action.message, { type: 'error' });
+        break;
+      }
     }
   });
 
@@ -30,7 +79,7 @@ const MainUI = (): React.ReactElement => {
     <React.Fragment>
       <div className={classes.container}>
         <div className={cx(classes.column, classes.left)}>
-          <h3 className={classes.heading}>데이터셋</h3>
+          <h3 className={classes.heading}>Dataset</h3>
           <Select
             className={classes.select}
             items={datasets}

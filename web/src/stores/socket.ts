@@ -43,6 +43,10 @@ class SocketStore extends EventEmitter {
   public sendMessage = (message: any) => {
     this.ws.send(JSON.stringify(message));
   };
+
+  public sendAction = (type: string, data: any) => {
+    this.sendMessage({ type, ...data });
+  };
 }
 
 export const socketStore = new SocketStore();

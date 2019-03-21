@@ -7,6 +7,12 @@ class DatasetStore {
 
   @observable
   public data: { [key: string]: any }[] = [];
+
+  @observable
+  public predictions: number[] = [];
+
+  @observable
+  public grounds: number[] = [];
 }
 
 export const datasetStore = new DatasetStore();
