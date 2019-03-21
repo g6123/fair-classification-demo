@@ -1,48 +1,47 @@
+import EventEmitter from 'eventemitter3';
 import { observable } from 'mobx';
 import { useObservable } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { noop } from '../utils/misc';
-import { debugStore } from './debug';
 
 export type MessageSender = (message: any) => void;
 export type MessageHandler = (message: any, event: MessageEvent) => void;
 export type ErrorHandler = (error: Event) => void;
 
-class SocketStore {
+class SocketStore extends EventEmitter {
   public ws: WebSocket;
 
   @observable
   public status: number;
 
   public constructor() {
+    super();
+
     this.ws = new WebSocket(SERVER_URI);
 
     this.status = this.ws.readyState;
 
     this.ws.addEventListener('open', () => {
       this.status = WebSocket.OPEN;
-      debugStore.log('info', `Socket connected to ${SERVER_URI}`);
+      this.emit('open');
     });
 
     this.ws.addEventListener('message', (event: MessageEvent) => {
-      debugStore.log('debug', `Socket message received: ${event.data}`);
+      this.emit('message', JSON.parse(event.data), event);
     });
 
-    this.ws.addEventListener('error', () => {
-      debugStore.log('error', 'Socket connection error');
+    this.ws.addEventListener('error', error => {
+      this.emit('error', error);
     });
 
     this.ws.addEventListener('close', () => {
       this.status = WebSocket.CLOSED;
-      debugStore.log('info', 'Socket connection closed');
+      this.emit('close');
     });
   }
 
   public sendMessage = (message: any) => {
-    const data = JSON.stringify(message);
-
-    this.ws.send(data);
-    debugStore.log('debug', `Socket message sent: ${data}`);
+    this.ws.send(JSON.stringify(message));
   };
 }
 
@@ -51,28 +50,15 @@ export const socketStore = new SocketStore();
 export const useSocket = (onMessage: MessageHandler = noop, onError: ErrorHandler = noop): SocketStore => {
   const store = useObservable(socketStore);
 
-  const handleMessage = (event: MessageEvent): void => {
-    onMessage(JSON.parse(event.data), event);
-  };
-
-  const handleError = (event: Event): void => {
-    onError(event);
-  };
-
   useEffect(() => {
-    if (onMessage !== noop) {
-      store.ws.addEventListener('message', handleMessage);
-    }
-
-    if (onError !== noop) {
-      store.ws.addEventListener('error', handleError);
-    }
+    store.addListener('message', onMessage);
+    store.addListener('error', onError);
 
     return () => {
-      store.ws.removeEventListener('message', handleMessage);
-      store.ws.removeEventListener('error', handleError);
+      store.removeListener('message', onMessage);
+      store.removeListener('error', onError);
     };
-  });
+  }, [onMessage, onError]);
 
   return store;
 };

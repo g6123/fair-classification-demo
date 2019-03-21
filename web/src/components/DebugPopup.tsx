@@ -11,7 +11,9 @@ const DebugPopup: React.SFC<Props> = ({ className, logs = [], ...props }): React
       {reverse(logs)
         .slice(0, 10)
         .map(({ id, date, level, content }) => (
-          <p key={`log-${id}`}>{`[${new Date(date).toLocaleTimeString()}] [${level.toUpperCase()}] ${content}`}</p>
+          <pre key={`log-${id}`}>
+            <code>{`[${new Date(date).toLocaleTimeString()}] [${level.toUpperCase()}] ${content}`}</code>
+          </pre>
         ))}
     </div>
   </div>

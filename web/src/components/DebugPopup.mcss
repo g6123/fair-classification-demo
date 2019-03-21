@@ -16,7 +16,11 @@
 .content {
   flex-grow: 1;
   margin: 0;
-  padding: 10px;
+  padding: 0 10px;
   font-size: 0.9em;
   overflow-y: scroll;
+
+  & pre {
+    margin: 10px 0;
+  }
 }
