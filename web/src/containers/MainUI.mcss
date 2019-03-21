@@ -52,8 +52,20 @@
 }
 
 .column.middle {
+  display: flex;
+  flex-direction: column;
   width: var(--middle-column-width);
   flex-shrink: 0;
+
+  & .graphic {
+    width: 100%;
+    height: 0;
+    flex-grow: 1;
+  }
+
+  & .dataset {
+    flex-grow: 1;
+  }
 }
 
 .column.right {

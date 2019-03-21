@@ -1,5 +1,6 @@
 import React from 'react';
-import { observer } from 'mobx-react-lite';
+import { AutoSizer, Table, Column } from 'react-virtualized';
+import { observer, Observer } from 'mobx-react-lite';
 import cx from 'classnames';
 import Select from '../components/Select';
 import Checkbox from '../components/Checkbox';
@@ -9,14 +10,23 @@ import datasets from '../domain/datasets';
 import * as methods from '../domain/methods';
 import reducers from '../domain/reducers';
 import { useOptions } from '../stores/options';
+import { useDataset } from '../stores/dataset';
 import { useDebug } from '../stores/debug';
 import { useSocket } from '../stores/socket';
+import { capitalize } from '../utils/misc';
 import classes from './MainUI.mcss';
 
 const MainUI = (): React.ReactElement => {
   const options = useOptions();
+  const dataset = useDataset();
   const debug = useDebug();
-  const socket = useSocket();
+
+  const socket = useSocket(message => {
+    if (message.type === 'dataset') {
+      dataset.columns = message.columns;
+      dataset.data = message.data;
+    }
+  });
 
   return (
     <React.Fragment>
@@ -81,15 +91,41 @@ const MainUI = (): React.ReactElement => {
             primary
             disabled={!options.isSubmittable}
             onClick={() => {
-              socket.sendMessage('hi');
+              socket.sendMessage({ type: 'dataset', name: options.dataset });
             }}
           >
             확인
           </Button>
         </div>
         <div className={cx(classes.column, classes.middle)}>
-          <canvas />
-          <h3 className={classes.heading}>데이터셋</h3>
+          <canvas className={classes.graphic} />
+          <div className={classes.dataset}>
+            <AutoSizer>
+              {({ width, height }) => (
+                <Observer>
+                  {() => (
+                    <Table
+                      width={width}
+                      height={height}
+                      headerHeight={20}
+                      rowHeight={30}
+                      rowCount={dataset.data.length}
+                      rowGetter={({ index }) => dataset.data[index]}
+                    >
+                      {dataset.columns.map((column, index, { length }) => (
+                        <Column
+                          key={`column-${column}`}
+                          width={width / length}
+                          label={capitalize(column)}
+                          dataKey={index.toString()}
+                        />
+                      ))}
+                    </Table>
+                  )}
+                </Observer>
+              )}
+            </AutoSizer>
+          </div>
         </div>
         <div className={cx(classes.column, classes.right)}>
           <h2>결과</h2>
