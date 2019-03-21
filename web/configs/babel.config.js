@@ -16,6 +16,7 @@ module.exports = {
         spec: false,
         loose: true,
         useBuiltIns: 'usage',
+        corejs: 3,
         modules: false,
       },
     ],

@@ -15,7 +15,7 @@ const Select: React.SFC<Props> = ({
   <select value={toString(value)} onChange={event => onChange(toValue(event.target.value), event)} {...props}>
     {value === null ? (
       <option value={toString(null)} disabled>
-        {placeholder || '선택하세요.'}
+        {placeholder}
       </option>
     ) : null}
     {[{ id: null }, ...groups].map(group =>
