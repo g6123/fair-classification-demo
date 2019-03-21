@@ -5,13 +5,11 @@ import cx from 'classnames';
 import Select from '../components/Select';
 import Checkbox from '../components/Checkbox';
 import Button from '../components/Button';
-import DebugPopup from '../components/DebugPopup';
 import datasets from '../domain/datasets';
 import * as methods from '../domain/methods';
 import reducers from '../domain/reducers';
 import { useOptions } from '../stores/options';
 import { useDataset } from '../stores/dataset';
-import { useDebug } from '../stores/debug';
 import { useSocket } from '../stores/socket';
 import { capitalize } from '../utils/misc';
 import classes from './MainUI.mcss';
@@ -19,7 +17,6 @@ import classes from './MainUI.mcss';
 const MainUI = (): React.ReactElement => {
   const options = useOptions();
   const dataset = useDataset();
-  const debug = useDebug();
 
   const socket = useSocket(message => {
     if (message.type === 'dataset') {
@@ -63,54 +60,48 @@ const MainUI = (): React.ReactElement => {
             }}
           />
 
-          <h3 className={classes.heading}>기타</h3>
-          <ul className={classes.others}>
-            <li className={classes.item}>
-              <Checkbox
-                title="실시간 모드"
-                value={options.isRealtime}
-                onChange={value => {
-                  options.isRealtime = value;
-                }}
-                disabled
-              />
-            </li>
-            <li className={classes.item}>
-              <Checkbox
-                title="디버그 모드"
-                value={options.showDebug}
-                onChange={value => {
-                  options.showDebug = value;
-                }}
-              />
-            </li>
-          </ul>
+          <h3 className={classes.heading}>Misc.</h3>
+          <Checkbox
+            title="실시간 모드"
+            value={options.realtime}
+            onChange={value => {
+              options.realtime = value;
+            }}
+            disabled
+          />
 
           <Button
             className={classes.heading}
             primary
             disabled={!options.isSubmittable}
             onClick={() => {
-              socket.sendMessage({ type: 'dataset', name: options.dataset });
+              socket.sendAction('FETCH_DATASET', { name: options.dataset });
+              socket.sendAction('APPLY_METHOD', options.toJSON());
             }}
           >
             확인
           </Button>
         </div>
         <div className={cx(classes.column, classes.middle)}>
-          <canvas className={classes.graphic} />
+          <canvas ref={canvasRef} className={classes.graphic} width={930} height={380} />
           <div className={classes.dataset}>
             <AutoSizer>
               {({ width, height }) => (
                 <Observer>
                   {() => (
                     <Table
+                      ref={tableRef}
                       width={width}
                       height={height}
                       headerHeight={20}
                       rowHeight={30}
                       rowCount={dataset.data.length}
                       rowGetter={({ index }) => dataset.data[index]}
+                      rowStyle={({ index }) =>
+                        index >= 0 && index < dataset.predictions.length
+                          ? { backgroundColor: color(dataset.grounds[index], dataset.predictions[index]) }
+                          : {}
+                      }
                     >
                       {dataset.columns.map((column, index, { length }) => (
                         <Column
@@ -131,11 +122,6 @@ const MainUI = (): React.ReactElement => {
           <h2>결과</h2>
         </div>
       </div>
-      <DebugPopup
-        className={classes.debug}
-        logs={debug.logs.slice()}
-        style={{ display: options.showDebug ? undefined : 'none' }}
-      />
     </React.Fragment>
   );
 };
