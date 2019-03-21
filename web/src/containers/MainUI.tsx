@@ -1,4 +1,5 @@
 import React from 'react';
+import SchemaForm from 'react-jsonschema-form';
 import { AutoSizer, Table, Column } from 'react-virtualized';
 import { observer, Observer } from 'mobx-react-lite';
 import cx from 'classnames';
@@ -39,20 +40,38 @@ const MainUI = (): React.ReactElement => {
             }}
           />
 
-          <h3 className={classes.heading}>방법</h3>
+          <h3 className={classes.heading}>Bias Mitigation Method</h3>
           <Select
             className={classes.select}
             groups={methods.groups}
             items={methods.items}
-            value={options.method}
+            value={options.method.type}
             onChange={value => {
-              options.method = value;
+              options.method.type = value;
             }}
           />
 
-          <h3>시각화</h3>
+          {methods.items
+            .filter(({ id: methodType }) => methodType === options.method.type)
+            .map(({ options: methodSchema = [] }) =>
+              methodSchema.map(({ id: schemaId, schema }) => (
+                <SchemaForm
+                  className={classes.methodOptions}
+                  key={schemaId}
+                  schema={schema as any}
+                  formData={options.method[schemaId]}
+                  onChange={({ formData }) => {
+                    options.method[schemaId] = formData;
+                  }}
+                >
+                  {true}
+                </SchemaForm>
+              )),
+            )}
+
+          <h3 className={classes.heading}>Visualization</h3>
           <Select
-            className={classes.dimension}
+            className={cx(classes.select, classes.dimension)}
             items={reducers}
             value={options.reducer}
             onChange={value => {

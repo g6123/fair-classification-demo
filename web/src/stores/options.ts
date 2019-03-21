@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, toJS } from 'mobx';
 import { useObservable } from 'mobx-react-lite';
 
 class OptionsStore {
@@ -6,13 +6,13 @@ class OptionsStore {
   public dataset: string | null = null;
 
   @observable
-  public method: string | null = null;
+  public method: { type: string | null; [key: string]: any } = { type: null };
 
   @observable
   public reducer: string | null = null;
 
   @observable
-  public isRealtime: boolean = false;
+  public realtime: boolean = false;
 
   @observable
   public showDebug: boolean = false;
@@ -20,6 +20,15 @@ class OptionsStore {
   @computed
   public get isSubmittable(): boolean {
     return this.dataset !== null && this.method !== null && this.reducer !== null;
+  }
+
+  public toJSON(): any {
+    return {
+      dataset: this.dataset,
+      method: toJS(this.method),
+      reducer: this.reducer,
+      realtime: this.realtime,
+    };
   }
 }
 

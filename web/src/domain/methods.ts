@@ -1,3 +1,5 @@
+import { classifier } from './method-options';
+
 export const groups = [
   {
     id: 'pre',
@@ -15,32 +17,42 @@ export const groups = [
 
 export const items = [
   {
+    id: 'none',
+    title: 'None',
+    options: [{ id: 'classifier', schema: classifier }],
+  },
+  {
     id: 'calmon',
-    title: 'Optimized Pre-processing',
-    disabled: true,
     group: 'pre',
+    title: 'Optimized Pre-processing',
+    options: [{ id: 'classifier', schema: classifier }],
+    disabled: true,
   },
   // {
   //   id: 'feldman',
-  //   title: 'Disparate Impact Remover',
   //   group: 'pre',
+  //   title: 'Disparate Impact Remover',
+  //   options: [{ id: 'classifier', schema: classifier }],
   // },
   {
     id: 'kamiran',
-    title: 'Reweighing',
-    disabled: true,
     group: 'pre',
+    title: 'Reweighing',
+    options: [{ id: 'classifier', schema: classifier }],
+    disabled: true,
   },
   {
     id: 'zemel',
-    title: 'Learning Fair Representation',
-    disabled: true,
     group: 'pre',
+    title: 'Learning Fair Representation',
+    options: [{ id: 'classifier', schema: classifier }],
+    disabled: true,
   },
   {
     id: 'ours',
-    title: 'Fair Representation via Adversarial Learning',
     group: 'pre',
+    title: 'Fair Representation via Adversarial Learning',
+    options: [{ id: 'classifier', schema: classifier }],
   },
   {
     id: 'zhang',
