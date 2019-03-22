@@ -49,6 +49,10 @@ const MainUI = (): React.ReactElement => {
         dataset.predictions = action.predictions;
         dataset.grounds = action.grounds;
 
+        if (action.epoch) {
+          dataset.progress = action.epoch;
+        }
+
         if (tableRef.current !== null) {
           tableRef.current.forceUpdateGrid();
         }
@@ -190,6 +194,7 @@ const MainUI = (): React.ReactElement => {
           <h2>결과</h2>
         </div>
       </div>
+      <progress className={classes.progress} value={dataset.progress[0]} max={dataset.progress[1]} />
     </React.Fragment>
   );
 };
