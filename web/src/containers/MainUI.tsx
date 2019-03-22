@@ -57,16 +57,20 @@ const MainUI = (): React.ReactElement => {
           tableRef.current.forceUpdateGrid();
         }
 
-        const node = canvasRef.current as HTMLCanvasElement;
+        if (canvasRef.current !== null) {
+          const node = canvasRef.current;
         const context = node.getContext('2d') as CanvasRenderingContext2D;
+
+          context.clearRect(0, 0, node.width, node.height);
 
         for (let i = 0; i < action.predictions.length; i++) {
           const y = action.grounds[i];
           const y_ = action.predictions[i];
-          const ps = action.positions[i].map((p: number) => (p + 1) / 2);
+            const ps = action.positions[i];
 
           context.fillStyle = color(y, y_);
-          context.fillRect(ps[0] * node.width, ps[1] * node.height, 3, 3);
+            context.fillRect(ps[0] * node.width, (1 - ps[1]) * node.height, 3, 3);
+          }
         }
 
         break;
