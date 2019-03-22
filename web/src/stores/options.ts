@@ -12,7 +12,7 @@ class OptionsStore {
   public reducer: string | null = null;
 
   @observable
-  public realtime: boolean = false;
+  public realtime: boolean = true;
 
   @observable
   public showDebug: boolean = false;

@@ -59,16 +59,16 @@ const MainUI = (): React.ReactElement => {
 
         if (canvasRef.current !== null) {
           const node = canvasRef.current;
-        const context = node.getContext('2d') as CanvasRenderingContext2D;
+          const context = node.getContext('2d') as CanvasRenderingContext2D;
 
           context.clearRect(0, 0, node.width, node.height);
 
-        for (let i = 0; i < action.predictions.length; i++) {
-          const y = action.grounds[i];
-          const y_ = action.predictions[i];
+          for (let i = 0; i < action.predictions.length; i++) {
+            const y = action.grounds[i];
+            const y_ = action.predictions[i];
             const ps = action.positions[i];
 
-          context.fillStyle = color(y, y_);
+            context.fillStyle = color(y, y_);
             context.fillRect(ps[0] * node.width, (1 - ps[1]) * node.height, 3, 3);
           }
         }
