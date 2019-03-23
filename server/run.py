@@ -1,16 +1,12 @@
 import json
-from pprint import pprint
 
 import asyncio
 import websockets
 
-import numpy as np
-from sklearn.linear_model import LinearRegression
-import torch
-
 from app.datasets import datasets
 from app.classifiers import classifiers
-from app.datasets.reshape import ReshapeDataset
+from app.visualizers import visualizers
+from app.utils import scale
 
 
 async def handle(ws, path):
@@ -21,55 +17,69 @@ async def handle(ws, path):
         if action_type == 'FETCH_DATASET':
             dataset_name = action.get('name', None)
 
-            if dataset_name in datasets:
-                Dataset = datasets[dataset_name]
-                dataset = Dataset(train=False)
+            if dataset_name not in datasets:
+                return await send_action(ws, 'SET_ERROR', {'message': "Unknown dataset name"})
 
-                response = {'name': dataset_name}
-                response.update(dataset.df.to_dict(orient='split'))
-                response.pop('index')
+            Dataset = datasets[dataset_name]
+            dataset = Dataset(train=False)
 
-                await send_action(ws, 'SET_DATASET', response)
-            else:
-                await send_action(ws, 'SET_ERROR', {'message': "Unknown dataset name"})
+            response = {'name': dataset_name}
+            response.update(dataset.df.to_dict(orient='split'))
+            response.pop('index', None)
+
+            await send_action(ws, 'SET_DATASET', response)
         elif action_type == 'APPLY_METHOD':
             dataset_name = action.get('dataset', None)
             method_type = action.get('method', {}).get('type', None)
-            classifier_type = action.get('method', {}).get('classifier')
+            visualizer_type = action.get('visualizer', None)
 
-            if dataset_name in datasets:
-                Dataset = datasets[dataset_name]
+            if dataset_name not in datasets:
+                return await send_action(ws, 'SET_ERROR', {'message': "Unknown dataset name"})
 
-                train_dataset = Dataset(test=False)
-                test_dataset = Dataset(train=False)
+            if visualizer_type not in visualizers:
+                return await send_action(ws, 'SET_ERROR', {'message': "Unkown visualizer type"})
 
-                if method_type == 'none':
-                    if classifier_type in classifiers:
-                        Classifier = classifiers[classifier_type]
-                        classifier = Classifier(train_dataset, test_dataset)
 
-                        for epoch in classifier.fit():
-                            await send_action(ws, 'SET_POINTS', {
-                                'epoch': [epoch + 1, classifier.epochs],
-                                'grounds': test_dataset.y.tolist(),
-                                **classifier.predict(),
-                            })
-                    else:
-                        await send_action(ws, 'SET_ERROR', {'message': "Unkown classifier type"})
-                else:
-                    await send_action(ws, 'SET_ERROR', {'message': "Unkown bias mitigation method"})
+            Dataset = datasets[dataset_name]
+
+            train_dataset = Dataset(test=False)
+            test_dataset = Dataset(train=False)
+
+            visualizer = visualizers[visualizer_type]
+
+            if method_type == 'none':
+                classifier_type = action.get('method', {}).get('classifier', {}).get('type', None)
+
+                if classifier_type not in classifiers:
+                    return await send_action(ws, 'SET_ERROR', {'message': "Unkown classifier type"})
+
+                Classifier = classifiers[classifier_type]
+                classifier = Classifier(train_dataset, test_dataset)
+
+                for epoch in classifier.fit():
+                    y_ = classifier.predict()
+
+                    z_ = visualizer(test_dataset, y_)
+                    z_ = scale(z_)
+
+                    await send_action(ws, 'SET_POINTS', {
+                        'epoch': [epoch + 1, classifier.epochs],
+                        'grounds': test_dataset.y.tolist(),
+                        'predictions': y_.argmax(axis=1).tolist(),
+                        'positions': z_.tolist(),
+                    })
             else:
-                await send_action(ws, 'SET_ERROR', {'message': "Unknown dataset name"})
+                await send_action(ws, 'SET_ERROR', {'message': "Unkown bias mitigation method"})
         else:
             await send_action(ws, 'SET_ERROR', {'message': "Unknown action type"})
 
 
 async def send_action(ws, action_type, data):
-    await send_message(ws, {'type': action_type, **data})
+    return await send_message(ws, {'type': action_type, **data})
 
 
 async def send_message(ws, message):
-    await ws.send(json.dumps(message))
+    return await ws.send(json.dumps(message))
 
 serve = websockets.serve(handle, 'localhost', 9000)
 

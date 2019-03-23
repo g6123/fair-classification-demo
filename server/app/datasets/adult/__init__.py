@@ -5,10 +5,13 @@ from ordered_set import OrderedSet
 import torch
 from torch.utils.data.dataset import Dataset
 
-from app.datasets.utils import relpath, read_uci_names, read_uci_data, to_ilocs, scale
+from app.datasets.utils import read_uci_names, read_uci_data, to_ilocs
+from app.utils import relpath, scale
 
 
 class AdultDataset(Dataset):
+    name = "adult"
+
     col_a = "sex"
     col_y = "income"
     cols, cols_cat, cols_cont = read_uci_names(relpath(__file__, 'adult.names'), append_cat=[col_y])

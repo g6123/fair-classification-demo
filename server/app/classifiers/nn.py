@@ -50,9 +50,8 @@ class NeuralNetwork(AbstractClassifier):
 
             x, _ = next(iter(loader))
             x = x.to(device).float()
-            y_ = self.model(x)
 
-            return {
-                'positions': y_.exp().cpu().tolist(),
-                'predictions': y_.argmax(dim=1).cpu().tolist(),
-            }
+            y_ = self.model(x).exp()
+            y_ = y_.cpu().numpy()
+
+        return y_

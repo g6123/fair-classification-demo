@@ -23,7 +23,4 @@ class LinearRegression(AbstractClassifier):
         y_ = np.stack((y_, y_ * -1), axis=-1)
         y_ = (y_ + 1) / 2
 
-        return {
-            'positions': y_.tolist(),
-            'predictions': np.argmax(y_, axis=1).tolist(),
-        }
+        return y_

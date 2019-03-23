@@ -1,13 +1,7 @@
 import io
-from os import path
 
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
-
-
-def relpath(base, target):
-    return path.join(path.dirname(base), target)
 
 
 def read_uci_names(filename, append_cat=None, append_cont=None):
@@ -62,18 +56,6 @@ def read_uci_data(*filenames, **kwargs):
     dfs.insert(0, df_all)
 
     return dfs
-
-
-def scale(arr, fit_to=None, scaler=None):
-    if fit_to is None:
-        fit_to = arr
-
-    if scaler is None:
-        scaler = MinMaxScaler
-
-    scaler = scaler()
-    scaler.fit(fit_to)
-    return scaler.transform(arr)
 
 
 def to_ilocs(series):
