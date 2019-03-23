@@ -3,6 +3,9 @@ import json
 import asyncio
 import websockets
 
+import numpy as np
+from sklearn.metrics import confusion_matrix
+
 from app.datasets import datasets
 from app.classifiers import classifiers
 from app.visualizers import visualizers
@@ -62,11 +65,15 @@ async def handle(ws, path):
                     z_ = visualizer(test_dataset, y_)
                     z_ = scale(z_)
 
+                    y = test_dataset.y
+                    y_ = np.argmax(y_, axis=1)
+
                     await send_action(ws, 'SET_POINTS', {
                         'epoch': [epoch + 1, classifier.epochs],
-                        'grounds': test_dataset.y.tolist(),
-                        'predictions': y_.argmax(axis=1).tolist(),
+                        'grounds': y.tolist(),
+                        'predictions': y_.tolist(),
                         'positions': z_.tolist(),
+                        'reports': {k: confusion_matrix(y[v], y_[v]).tolist() for k, v in test_dataset.ilocs.items()},
                     })
             else:
                 await send_action(ws, 'SET_ERROR', {'message': "Unkown bias mitigation method"})
