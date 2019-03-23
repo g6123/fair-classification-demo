@@ -1,7 +1,7 @@
 export default [
   {
     id: 'tsne',
-    title: 't-SNE',
+    title: 'Parametric t-SNE',
   },
   {
     id: 'yy',

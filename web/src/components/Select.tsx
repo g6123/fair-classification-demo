@@ -6,7 +6,7 @@ const toString = (value: string | null): string => (value === null ? '' : value)
 
 const Select: React.SFC<Props> = ({
   groups = [],
-  items = [],
+  values: items = [],
   value = null,
   onChange = noop,
   placeholder = null,
@@ -45,8 +45,8 @@ const Select: React.SFC<Props> = ({
 );
 
 export interface Props extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'value' | 'onChange'> {
-  groups?: { id: string; title: string }[];
-  items?: { id: string; title: string; group?: string; disabled?: boolean }[];
+  groups?: { id: string | number; title: string }[];
+  values?: { id: string | number; title: string; group?: string; disabled?: boolean }[];
   value?: string | null;
   placeholder?: string;
   onChange?: (value: string | null, event: React.ChangeEvent) => void;

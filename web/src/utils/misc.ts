@@ -16,3 +16,18 @@ export const capitalize = (text: string): string =>
     .split(' ')
     .map(w => w.substr(0, 1).toUpperCase() + w.substr(1))
     .join(' ');
+
+export const get = <T>(target: any, path: string, defaultValue: any): T => {
+  let result = target;
+
+  for (const key of path.split('.')) {
+    if (result === undefined || result === null) {
+      result = defaultValue;
+      break;
+    } else {
+      result = result[key];
+    }
+  }
+
+  return result;
+};

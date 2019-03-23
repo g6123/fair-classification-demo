@@ -12,66 +12,21 @@
   align-items: stretch;
 }
 
-.others {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  & .item {
-    margin: 10px 0;
-  }
-}
-
 .column {
   padding: 10px;
   border: 1px solid #ccc;
   box-sizing: border-box;
-
-  & .heading {
-    width: 100%;
-    margin: 50px 0 10px 0;
-    font-size: 1.1em;
-
-    &:first-child {
-      margin-top: 0;
-    }
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
 }
 
 .column.left {
   width: 300px;
   flex-shrink: 0;
   overflow-y: auto;
-
-  & .select {
-    width: 100%;
-  }
-
-  & .methodOptions {
-    & :global .control-label {
-      display: block;
-      margin: 10px 0;
-    }
-  }
 }
 
 .column.middle {
-  display: flex;
-  flex-direction: column;
   width: var(--middle-column-width);
   flex-shrink: 0;
-
-  & .graphic {
-    align-self: center;
-  }
-
-  & .dataset {
-    flex-grow: 1;
-  }
 }
 
 .column.right {

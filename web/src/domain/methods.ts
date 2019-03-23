@@ -1,4 +1,4 @@
-import { classifier } from './method-options';
+import { classifier, training } from './method-options';
 
 export const groups = [
   {
@@ -19,7 +19,18 @@ export const items = [
   {
     id: 'none',
     title: 'None',
-    options: [{ id: 'classifier', schema: classifier }],
+    options: [
+      {
+        id: 'classifier',
+        schema: classifier,
+        defaultValue: { type: 'nn' },
+      },
+      {
+        id: 'training',
+        schema: training,
+        defaultValue: { epochs: 100, batchSize: 2048 },
+      },
+    ],
   },
   {
     id: 'calmon',
@@ -52,18 +63,18 @@ export const items = [
     id: 'ours',
     group: 'pre',
     title: 'Fair Representation via Adversarial Learning',
-    options: [{ id: 'classifier', schema: classifier }],
   },
   {
     id: 'zhang',
-    title: 'Adversarial Debiasing',
     group: 'in',
+    title: 'Adversarial Debiasing',
+    disabled: true,
   },
   {
     id: 'kamishima',
+    group: 'in',
     title: 'Prejudice Remover',
     disabled: true,
-    group: 'in',
   },
   // {
   //   id: 'celis',
@@ -72,14 +83,15 @@ export const items = [
   // },
   {
     id: 'kamiran',
+    group: 'post',
     title: 'Reject Option Classifier',
     disabled: true,
-    group: 'post',
   },
   {
     id: 'hardt',
-    title: 'Equalized Odds Post-processing',
     group: 'post',
+    title: 'Equalized Odds Post-processing',
+    disabled: true,
   },
   // {
   //   id: 'pleiss',

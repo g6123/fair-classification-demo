@@ -9,10 +9,13 @@ class DatasetStore {
   public data: { [key: string]: any }[] = [];
 
   @observable
+  public grounds: number[] = [];
+
+  @observable
   public predictions: number[] = [];
 
   @observable
-  public grounds: number[] = [];
+  public positions: [number, number][] = [];
 
   @observable
   public progress: [number, number] = [0, 0];

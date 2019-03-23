@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+
+  & .title {
+    margin: 0 20px 0 0;
+    font-size: 1em;
+    font-weight: bold;
+  }
+
+  & .label {
+    margin: 0 5px 0 0;
+    font-size: 1em;
+    font-weight: normal;
+  }
+
+  & .select {
+    margin-right: 10px;
+  }
+}
+
+.graphic {
+  align-self: center;
+}
+
+.dataset {
+  flex-grow: 1;
+}
