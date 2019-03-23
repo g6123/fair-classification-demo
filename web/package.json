@@ -59,6 +59,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.0",
+    "@nivo/bar": "^0.54.0",
+    "@nivo/pie": "^0.54.0",
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.6",
     "core-js": "^3.0.0",

@@ -18,19 +18,15 @@
   box-sizing: border-box;
 }
 
-.column.left {
+.column.left,
+.column.right {
   width: 300px;
   flex-shrink: 0;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 
 .column.middle {
   width: var(--middle-column-width);
-  flex-shrink: 0;
-}
-
-.column.right {
-  width: 300px;
   flex-shrink: 0;
 }
 

@@ -18,6 +18,9 @@ class DatasetStore {
   public positions: [number, number][] = [];
 
   @observable
+  public reports: { [key: string]: [[number, number], [number, number]] } = {};
+
+  @observable
   public progress: [number, number] = [0, 0];
 }
 

@@ -26,6 +26,7 @@ const MainUI = (): React.ReactElement => {
         dataset.grounds = action.grounds;
         dataset.predictions = action.predictions;
         dataset.positions = action.positions;
+        dataset.reports = action.reports;
         dataset.progress = action.epoch;
         break;
       }
