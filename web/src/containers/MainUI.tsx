@@ -7,7 +7,7 @@ import { useDataset } from '../stores/dataset';
 import { useSocket } from '../stores/socket';
 import MainOptionsUI from './MainOptionsUI';
 import MainOutputUI from './MainOutputUI';
-import MainResultsUI from './MainResultsUI';
+import MainReportUI from './MainReportUI';
 import classes from './MainUI.mcss';
 
 const MainUI = (): React.ReactElement => {
@@ -48,7 +48,7 @@ const MainUI = (): React.ReactElement => {
           }}
         />
         <MainOutputUI className={cx(classes.column, classes.middle)} />
-        <MainResultsUI className={cx(classes.column, classes.right)} />
+        <MainReportUI className={cx(classes.column, classes.right)} />
       </div>
       <progress className={classes.progress} value={dataset.progress[0]} max={dataset.progress[1]} />
     </React.Fragment>
