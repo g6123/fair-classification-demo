@@ -4,26 +4,26 @@ import { Bar } from '@nivo/bar';
 import { observer } from 'mobx-react-lite';
 import cx from 'classnames';
 import { useDataset } from '../stores/dataset';
-import { TP, FN, FP, TN } from '../domain/colors';
+import { rgba, COLOR_TP, COLOR_FN, COLOR_FP, COLOR_TN, COLOR_NONE } from '../domain/colors';
 import { percent, cmSum, sum } from '../utils/math';
 import classes from './MainReportUI.mcss';
 
 const colorBy = (props: any): string => {
   switch (props.id) {
     case 'True Positive':
-      return TP;
+      return rgba(COLOR_TP);
 
     case 'False Negative':
-      return FN;
+      return rgba(COLOR_FN);
 
     case 'False Positive':
-      return FP;
+      return rgba(COLOR_FP);
 
     case 'True Negative':
-      return TN;
+      return rgba(COLOR_TN);
 
     default:
-      return '';
+      return rgba(COLOR_NONE);
   }
 };
 
@@ -32,18 +32,23 @@ const MainReportUI: React.SFC<Props> = ({ className, ...props }): React.ReactEle
 
   return (
     <div className={cx(classes.container, className)} {...props}>
+      <h2 className={classes.title}>Protected Attribute</h2>
       <Pie
         width={100}
         height={100}
+        animate={false}
         data={Object.entries(dataset.reports).map(([label, cm]) => ({
           id: label.toLowerCase(),
           label,
           value: cmSum(cm),
         }))}
       />
+
+      <h2 className={classes.title}>Target Attribute</h2>
       <Bar
         width={100}
         height={100}
+        animate={false}
         data={[
           {
             label: 'Ground Truth',
@@ -58,11 +63,14 @@ const MainReportUI: React.SFC<Props> = ({ className, ...props }): React.ReactEle
         ]}
         indexBy="label"
         keys={['Positive', 'Negative']}
-        colorBy={({ id }) => (id === 'Positive' ? TP : id === 'Negative' ? TN : '')}
+        colorBy={({ id }) => (id === 'Positive' ? rgba(COLOR_TP) : id === 'Negative' ? rgba(COLOR_TN) : '')}
       />
+
+      <h2 className={classes.title}>Prediction by Protected Attribute</h2>
       <Bar
         width={100}
         height={100}
+        animate={false}
         data={Object.entries(dataset.reports).map(([label, cm]) => ({
           label,
           'True Positive': percent(cm[1][1] / cmSum(cm)),
@@ -74,9 +82,12 @@ const MainReportUI: React.SFC<Props> = ({ className, ...props }): React.ReactEle
         keys={['True Positive', 'False Positive', 'True Negative', 'False Negative']}
         colorBy={colorBy}
       />
+
+      <h2 className={classes.title}>True Positive Rate</h2>
       <Bar
         width={100}
         height={100}
+        animate={false}
         data={Object.entries(dataset.reports).map(([label, cm]) => ({
           label,
           'True Positive': percent(cm[1][1] / cmSum(cm, [[1, 0], [1, 1]])),
@@ -86,9 +97,12 @@ const MainReportUI: React.SFC<Props> = ({ className, ...props }): React.ReactEle
         keys={['True Positive', 'False Negative']}
         colorBy={colorBy}
       />
+
+      <h2 className={classes.title}>False Positive Rate</h2>
       <Bar
         width={100}
         height={100}
+        animate={false}
         data={Object.entries(dataset.reports).map(([label, cm]) => ({
           label,
           'False Positive': percent(cm[0][1] / cmSum(cm, [[0, 1], [0, 0]])),

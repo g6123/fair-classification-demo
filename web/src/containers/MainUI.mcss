@@ -22,6 +22,9 @@
 .column.right {
   width: 300px;
   flex-shrink: 0;
+}
+
+.column.left {
   overflow-y: auto;
 }
 

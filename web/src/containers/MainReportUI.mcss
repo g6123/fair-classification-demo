@@ -1,3 +1,14 @@
 .container {
-  /* TODO */
+  text-align: center;
+}
+
+.title {
+  margin: 30px 0 10px 0;
+  text-align: left;
+  font-size: 1em;
+  font-weight: bold;
+
+  &:first-child {
+    margin-top: 0;
+  }
 }
