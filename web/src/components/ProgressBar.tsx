@@ -3,11 +3,11 @@ import cx from 'classnames';
 import { percent } from '../utils/math';
 import classes from './ProgressBar.mcss';
 
-const ProgressBar: React.SFC<Props> = ({ value = 0, max = 0, message, className }): React.ReactElement => {
+const ProgressBar: React.SFC<Props> = ({ value = 0, max = 0, message, className, ...props }): React.ReactElement => {
   const ratio = isNaN(value / max) ? 0 : value / max;
 
   return (
-    <div className={cx(classes.container, className)}>
+    <div className={cx(classes.container, className)} {...props}>
       <progress className={classes.bar} value={value} max={max} />
       <div className={classes.text}>
         <span className={classes.message}>{message}</span>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import React, { useRef, useImperativeHandle, forwardRef } from 'react';
 
 export type vec2 = [number, number];
@@ -43,15 +44,16 @@ const DatasetCanvas: React.SFC<Props> = (props, ref): React.ReactElement => {
       }
     },
     drawPoints(Z: vec2[], d: number = 1, C: (i: number) => vec4) {
-      if (this.element !== null && this.context !== null) {
-        /* eslint-disable @typescript-eslint/camelcase */
-        const w = this.element.width;
-        const h = this.element.height;
+      const { element, context } = this;
+
+      if (element !== null && context !== null) {
+        const w = element.width;
+        const h = element.height;
         const d_l = Math.round(d / 2);
         const d_r = d - d_l;
         let i, x_c, y_c, x, y, c, o;
 
-        const imageData = this.context.getImageData(0, 0, w, h);
+        const imageData = context.getImageData(0, 0, w, h);
 
         for (i = 0; i < Z.length; i++) {
           x_c = Math.round(Z[i][0] * w);
@@ -67,7 +69,7 @@ const DatasetCanvas: React.SFC<Props> = (props, ref): React.ReactElement => {
           }
         }
 
-        this.context.putImageData(imageData, 0, 0);
+        context.putImageData(imageData, 0, 0);
       }
     },
     clear() {
