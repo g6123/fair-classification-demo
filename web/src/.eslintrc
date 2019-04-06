@@ -26,6 +26,7 @@
   },
   "rules": {
     "@typescript-eslint/camelcase": ["warn", { "allow": ["__webpack_public_path__"] }],
+    "@typescript-eslint/explicit-function-return-type": ["warn", { "allowExpressions": true }],
     "@typescript-eslint/no-explicit-any": "off",
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     "no-console": "warn",

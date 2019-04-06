@@ -12,6 +12,8 @@
     "**/.prettier*": true,
   },
 
+  "editor.tabSize": 2,
+
   "[html]": {
     "editor.formatOnSave": true
   },
