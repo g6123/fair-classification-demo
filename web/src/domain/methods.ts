@@ -1,6 +1,6 @@
 import { classifier, training } from './method-options';
 
-export const groups = [
+export const groups: { id: string; title: string }[] = [
   {
     id: 'pre',
     title: 'Pre-processing',
@@ -15,7 +15,17 @@ export const groups = [
   },
 ];
 
-export const items = [
+export const items: {
+  id: string;
+  group?: string;
+  title: string;
+  options?: {
+    id: string;
+    schema: any;
+    defaultValue?: { [key: string]: any };
+  }[];
+  disabled?: boolean;
+}[] = [
   {
     id: 'none',
     title: 'None',
@@ -24,11 +34,6 @@ export const items = [
         id: 'classifier',
         schema: classifier,
         defaultValue: { type: 'nn' },
-      },
-      {
-        id: 'training',
-        schema: training,
-        defaultValue: { epochs: 100, batchSize: 2048 },
       },
     ],
   },
@@ -63,6 +68,18 @@ export const items = [
     id: 'ours',
     group: 'pre',
     title: 'Fair Representation via Adversarial Learning',
+    options: [
+      {
+        id: 'training',
+        schema: training,
+        defaultValue: { epochs: 100, batchSize: 2048 },
+      },
+      {
+        id: 'classifier',
+        schema: classifier,
+        defaultValue: { type: 'nn' },
+      },
+    ],
   },
   {
     id: 'zhang',

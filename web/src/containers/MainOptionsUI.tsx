@@ -40,21 +40,20 @@ const MainOptionsUI: React.SFC<Props> = ({ className, onSubmit = noop, ...props 
 
       {methods.items
         .filter(({ id }) => id === options.method.type)
-        .map(({ options: methodOptions = [] }) =>
-          (methodOptions as { id: string; schema: any; [key: string]: any }[]).map(({ id: schemaId, schema }) => (
-            <SchemaForm
-              className={classes.schemaForm}
-              key={schemaId}
-              schema={schema as any}
-              formData={options.method[schemaId]}
-              onChange={({ formData }) => {
-                options.method[schemaId] = formData;
-              }}
-            >
-              {true}
-            </SchemaForm>
-          )),
-        )}
+        .flatMap(item => item.options || [])
+        .map(({ id, schema }) => (
+          <SchemaForm
+            className={classes.schemaForm}
+            key={id}
+            schema={schema}
+            formData={options.method[id]}
+            onChange={({ formData }) => {
+              options.method[id] = formData;
+            }}
+          >
+            {true}
+          </SchemaForm>
+        ))}
 
       <h3 className={classes.heading}>Visualization</h3>
       <Select
