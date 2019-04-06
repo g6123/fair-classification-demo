@@ -2,6 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { toast } from 'react-toastify';
 import cx from 'classnames';
+import ProgressBar from '../components/ProgressBar';
 import { useOptions } from '../stores/options';
 import { useDataset } from '../stores/dataset';
 import { useSocket } from '../stores/socket';
@@ -51,7 +52,7 @@ const MainUI = (): React.ReactElement => {
         <MainOutputUI className={cx(classes.column, classes.middle)} />
         <MainReportUI className={cx(classes.column, classes.right)} />
       </div>
-      <progress className={classes.progress} value={dataset.progress[0]} max={dataset.progress[1]} />
+      <ProgressBar className={classes.progress} value={dataset.progress[0]} max={dataset.progress[1]} />
     </React.Fragment>
   );
 };

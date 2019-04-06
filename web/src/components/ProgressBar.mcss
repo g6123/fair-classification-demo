@@ -1,0 +1,18 @@
+.bar {
+  display: block;
+  width: 100%;
+}
+
+.text {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+
+  & .message {
+    text-align: left;
+  }
+
+  & .numbers {
+    text-align: right;
+  }
+}
