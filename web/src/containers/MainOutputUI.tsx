@@ -78,7 +78,11 @@ const MainOutputUI: React.SFC<Props> = ({ className, ...props }): React.ReactEle
           onChange={value => setFilters({ ...filters, prediction: value || ALL })}
         />
       </div>
-      <DatasetCanvas ref={canvas} width={930} height={600} />
+
+      <h2 className={classes.title}>Visualization Canvas</h2>
+      <DatasetCanvas ref={canvas} width={930} height={500} />
+
+      <h2 className={classes.title}>Dataset Table</h2>
       <DatasetTable
         className={classes.dataset}
         columns={dataset.columns}

@@ -3,14 +3,17 @@
   flex-direction: column;
 }
 
+.title {
+  font-size: 1em;
+  font-weight: bold;
+}
+
 .filters {
   display: flex;
   align-items: center;
 
   & .title {
     margin: 0 20px 0 0;
-    font-size: 1em;
-    font-weight: bold;
   }
 
   & .label {
