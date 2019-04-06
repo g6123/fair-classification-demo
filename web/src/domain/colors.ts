@@ -1,20 +1,23 @@
-export const TP = 'hsl(186.8, 100%, 30%)';
-export const FN = 'hsl(186.8, 100%, 70%)';
-export const FP = 'hsl(6.8, 100%, 70%)';
-export const TN = 'hsl(6.8, 100%, 30%)';
+export type RGBA = [number, number, number, number];
 
-export const TRANSPARENT = 'rgba(255, 255, 255, 0)';
+export const COLOR_TP: RGBA = [0, 136, 153, 255];
+export const COLOR_FN: RGBA = [0, 136, 153, 110];
+export const COLOR_FP: RGBA = [153, 17, 0, 110];
+export const COLOR_TN: RGBA = [153, 17, 0, 255];
+export const COLOR_NONE: RGBA = [255, 255, 255, 255];
 
-export const get = (y: number, y_: number): string => {
+export const rgba = (raw: RGBA): string => `rgba(${raw[0]}, ${raw[1]}, ${raw[2]}, ${raw[3] / 255})`;
+
+export const color = (y: number, y_: number): RGBA => {
   if (y && y_) {
-    return TP;
+    return COLOR_TP;
   } else if (y && !y_) {
-    return FN;
+    return COLOR_FN;
   } else if (!y && y_) {
-    return FP;
+    return COLOR_FP;
   } else if (!y && !y_) {
-    return TN;
+    return COLOR_TN;
   } else {
-    return '';
+    return COLOR_NONE;
   }
 };

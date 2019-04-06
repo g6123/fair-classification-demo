@@ -8,7 +8,7 @@ import DatasetTable from '../components/DatasetTable';
 import { useOptions } from '../stores/options';
 import { useDataset } from '../stores/dataset';
 import datasets from '../domain/datasets';
-import { get as getColor, TRANSPARENT as COLOR_TRANSPARENT } from '../domain/colors';
+import { color, rgba, COLOR_NONE } from '../domain/colors';
 import { get } from '../utils/misc';
 import classes from './MainOutputUI.mcss';
 
@@ -25,20 +25,16 @@ const MainOutputUI: React.SFC<Props> = ({ className, ...props }): React.ReactEle
 
   useEffect(() => {
     if (canvas.current !== null) {
-      canvas.current.draw(dataset.positions, 3, i => {
-        if (filters.group !== ALL && dataset.data[i][groupColumn] !== filters.group) {
-          return COLOR_TRANSPARENT;
+      canvas.current.drawPoints(dataset.positions, 3, i => {
+        if (
+          (filters.group !== ALL && dataset.data[i][groupColumn] !== filters.group) ||
+          (filters.ground !== ALL && dataset.grounds[i] !== +filters.ground) ||
+          (filters.prediction !== ALL && dataset.predictions[i] !== +filters.prediction)
+        ) {
+          return COLOR_NONE;
+        } else {
+          return color(dataset.grounds[i], dataset.predictions[i]);
         }
-
-        if (filters.ground !== ALL && dataset.grounds[i] !== +filters.ground) {
-          return COLOR_TRANSPARENT;
-        }
-
-        if (filters.prediction !== ALL && dataset.predictions[i] !== +filters.prediction) {
-          return COLOR_TRANSPARENT;
-        }
-
-        return getColor(dataset.grounds[i], dataset.predictions[i]);
       });
     }
 
@@ -91,7 +87,7 @@ const MainOutputUI: React.SFC<Props> = ({ className, ...props }): React.ReactEle
           const { index, style } = props;
 
           if (index >= 0 && index < dataset.predictions.length) {
-            style.backgroundColor = getColor(dataset.grounds[index], dataset.predictions[index]);
+            style.backgroundColor = rgba(color(dataset.grounds[index], dataset.predictions[index]));
           }
 
           return React.cloneElement(defaultTableRowRenderer(props) as React.ReactElement, { style });
