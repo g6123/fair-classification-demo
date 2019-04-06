@@ -8,6 +8,7 @@ import DatasetTable from '../components/DatasetTable';
 import { useOptions } from '../stores/options';
 import { useDataset } from '../stores/dataset';
 import datasets from '../domain/datasets';
+import visualizers from '../domain/visualizers';
 import { color, rgba, COLOR_NONE } from '../domain/colors';
 import { get } from '../utils/misc';
 import classes from './MainOutputUI.mcss';
@@ -22,9 +23,13 @@ const MainOutputUI: React.SFC<Props> = ({ className, ...props }): React.ReactEle
 
   const datasetDomain = datasets.find(({ id }) => id === options.dataset);
   const groupColumn = dataset.columns.findIndex(col => col === get(datasetDomain, 'protected.column', null));
+  const visualizerDomain = visualizers.find(({ id }) => id === options.visualizer);
+  const axis = get<{ x: string; y: string }>(visualizerDomain, 'axis', { x: '', y: '' });
 
   useEffect(() => {
     if (canvas.current !== null) {
+      canvas.current.drawAxis(axis.x, axis.y);
+
       canvas.current.drawPoints(dataset.positions, 3, i => {
         if (
           (filters.group !== ALL && dataset.data[i][groupColumn] !== filters.group) ||
@@ -43,7 +48,7 @@ const MainOutputUI: React.SFC<Props> = ({ className, ...props }): React.ReactEle
         canvas.current.clear();
       }
     };
-  }, [filters, canvas, dataset.grounds, dataset.predictions, dataset.positions]);
+  }, [canvas, axis, filters, dataset.grounds, dataset.predictions, dataset.positions]);
 
   return (
     <div className={cx(classes.container, className)} {...props}>

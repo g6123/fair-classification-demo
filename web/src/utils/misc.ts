@@ -22,11 +22,14 @@ export const get = <T>(target: any, path: string, defaultValue: any): T => {
 
   for (const key of path.split('.')) {
     if (result === undefined || result === null) {
-      result = defaultValue;
-      break;
-    } else {
-      result = result[key];
+      return defaultValue;
     }
+
+    result = result[key];
+  }
+
+  if (result === undefined || result === null) {
+    return defaultValue;
   }
 
   return result;

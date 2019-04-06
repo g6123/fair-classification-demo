@@ -13,6 +13,35 @@ const DatasetCanvas: React.SFC<Props> = (props, ref): React.ReactElement => {
     get context() {
       return (this.element && this.element.getContext('2d')) || null;
     },
+    drawAxis(t_x: string, t_y: string) {
+      const { element, context } = this;
+
+      if (element !== null && context !== null) {
+        context.beginPath();
+        context.strokeStyle = '#ccc';
+        context.fillStyle = '#ccc';
+
+        context.moveTo(5, element.height);
+        context.lineTo(5, 0);
+        context.lineTo(0, 10);
+        context.moveTo(5, 0);
+        context.lineTo(10, 10);
+
+        context.textAlign = 'start';
+        context.fillText(t_x, 10, 20);
+
+        context.moveTo(0, element.height - 5);
+        context.lineTo(element.width, element.height - 5);
+        context.lineTo(element.width - 10, element.height - 10);
+        context.moveTo(element.width, element.height - 5);
+        context.lineTo(element.width - 10, element.height);
+
+        context.textAlign = 'end';
+        context.fillText(t_y, element.width - 20, element.height - 10);
+
+        context.stroke();
+      }
+    },
     drawPoints(Z: vec2[], d: number = 1, C: (i: number) => vec4) {
       if (this.element !== null && this.context !== null) {
         /* eslint-disable @typescript-eslint/camelcase */
@@ -59,6 +88,7 @@ export interface Props extends React.HTMLAttributes<HTMLCanvasElement> {
 export interface Ref {
   element: HTMLCanvasElement | null;
   context: CanvasRenderingContext2D | null;
+  drawAxis(t_x: string, t_y: string): void;
   drawPoints(Z: vec2[], d?: number, C?: (i: number) => vec4): void;
   clear(): void;
 }
