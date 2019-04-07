@@ -30,9 +30,12 @@ const MainUI = (): React.ReactElement => {
         dataset.predictions = action.predictions;
         dataset.positions = action.positions;
         dataset.reports = action.reports;
+        break;
+      }
 
-        progress.value = action.epoch[0];
-        progress.max = action.epoch[1];
+      case 'SET_PROGRESS': {
+        progress.value = action.value;
+        progress.max = action.max;
         progress.message = action.message;
         break;
       }
