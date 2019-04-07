@@ -19,9 +19,6 @@ class DatasetStore {
 
   @observable
   public reports: { [key: string]: [[number, number], [number, number]] } = {};
-
-  @observable
-  public progress: [number, number] = [0, 0];
 }
 
 export const datasetStore = new DatasetStore();

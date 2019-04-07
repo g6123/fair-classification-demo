@@ -5,6 +5,7 @@ import cx from 'classnames';
 import ProgressBar from '../components/ProgressBar';
 import { useOptions } from '../stores/options';
 import { useDataset } from '../stores/dataset';
+import { useProgress } from '../stores/progress';
 import { useSocket } from '../stores/socket';
 import MainOptionsUI from './MainOptionsUI';
 import MainOutputUI from './MainOutputUI';
@@ -14,6 +15,7 @@ import classes from './MainUI.mcss';
 const MainUI = (): React.ReactElement => {
   const options = useOptions();
   const dataset = useDataset();
+  const progress = useProgress();
 
   const socket = useSocket(action => {
     switch (action.type) {
@@ -28,7 +30,10 @@ const MainUI = (): React.ReactElement => {
         dataset.predictions = action.predictions;
         dataset.positions = action.positions;
         dataset.reports = action.reports;
-        dataset.progress = action.epoch;
+
+        progress.value = action.epoch[0];
+        progress.max = action.epoch[1];
+        progress.message = action.message;
         break;
       }
 
@@ -52,7 +57,7 @@ const MainUI = (): React.ReactElement => {
         <MainOutputUI className={cx(classes.column, classes.middle)} />
         <MainReportUI className={cx(classes.column, classes.right)} />
       </div>
-      <ProgressBar className={classes.progress} value={dataset.progress[0]} max={dataset.progress[1]} />
+      <ProgressBar className={classes.progress} value={progress.value} max={progress.max} message={progress.message} />
     </React.Fragment>
   );
 };
