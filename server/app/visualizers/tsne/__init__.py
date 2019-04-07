@@ -1,6 +1,7 @@
 import torch
 
 from app.models.tsne import ParametricTSNE
+from app.models.utils import map_location
 from app.utils import relpath
 
 device = torch.device('cuda')
@@ -8,9 +9,7 @@ device = torch.device('cuda')
 
 def fit_transform(dataset, y_):
     model = ParametricTSNE(dataset.x.shape[1], 128, 2).to(device)
-
-    state_filepath = relpath(__file__, "{}.pth".format(dataset.name))
-    model.load_state_dict(torch.load(state_filepath))
+    model.load_state_dict(torch.load(relpath(__file__, "{}.pth".format(dataset.name)), map_location=map_location))
 
     with torch.no_grad():
         model.eval()
