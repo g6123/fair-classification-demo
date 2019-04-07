@@ -5,10 +5,10 @@ class AbstractClassifier(object):
 
     @property
     def epochs(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def fit(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def predict(self):
-        raise NotImplementedError()
+        raise NotImplementedError

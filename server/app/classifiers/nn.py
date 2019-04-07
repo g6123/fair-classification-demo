@@ -9,36 +9,37 @@ device = torch.device('cuda')
 
 
 class NeuralNetwork(AbstractClassifier):
-    def __init__(self, train_dataset, test_dataset, epochs=100, **kwargs):
-        super(NeuralNetwork, self).__init__(train_dataset, test_dataset)
+    def __init__(self, train_dataset, test_dataset, **kwargs):
+        self._model = Classifier().to(device)
+        self._optimizer = torch.optim.Adam(self._model.parameters(), lr=0.001)
+        self._compute_loss = torch.nn.NLLLoss().to(device)
 
-        self.model = Classifier().to(device)
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.001)
-        self.compute_loss = torch.nn.NLLLoss().to(device)
+        self._epochs = kwargs.pop('epochs', 100)
+        self._batch_size = kwargs.pop('batchSize', 2048)
 
-        self._epochs = epochs
+        super(NeuralNetwork, self).__init__(train_dataset, test_dataset, **kwargs)
 
     @property
     def epochs(self):
         return self._epochs
 
     def fit(self):
-        loader = DataLoader(ReshapeDataset(self.train_dataset, (1, 11, 10)), batch_size=2048, shuffle=True)
+        loader = DataLoader(ReshapeDataset(self.train_dataset, (1, 11, 10)), batch_size=self._batch_size, shuffle=True)
 
-        for epoch in range(self.epochs):
-            self.model.train()
+        for epoch in range(self._epochs):
+            self._model.train()
 
             for input, target in loader:
-                self.optimizer.zero_grad()
+                self._optimizer.zero_grad()
 
                 input = input.to(device).float()
                 target = target.to(device)
-                output = self.model(input)
+                output = self._model(input)
 
-                loss = self.compute_loss(output, target)
+                loss = self._compute_loss(output, target)
 
                 loss.backward()
-                self.optimizer.step()
+                self._optimizer.step()
 
             yield epoch
 
@@ -46,12 +47,12 @@ class NeuralNetwork(AbstractClassifier):
         loader = DataLoader(ReshapeDataset(self.test_dataset, (1, 11, 10)), batch_size=len(self.test_dataset))
 
         with torch.no_grad():
-            self.model.eval()
+            self._model.eval()
 
             x, _ = next(iter(loader))
             x = x.to(device).float()
 
-            y_ = self.model(x).exp()
+            y_ = self._model(x).exp()
             y_ = y_.cpu().numpy()
 
         return y_

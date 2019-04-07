@@ -1,4 +1,4 @@
-from torch.nn import Sequential, Conv2d, Linear, Dropout, ReLU, LogSoftmax
+from torch.nn import Conv2d, Dropout, Linear, LogSoftmax, ReLU, Sequential
 
 from app.models.flatten import Flatten
 

@@ -42,7 +42,6 @@ async def handle(ws, path):
             if visualizer_type not in visualizers:
                 return await send_action(ws, 'SET_ERROR', {'message': "Unkown visualizer type"})
 
-
             Dataset = datasets[dataset_name]
 
             train_dataset = Dataset(test=False)

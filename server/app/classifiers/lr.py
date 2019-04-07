@@ -6,7 +6,7 @@ from app.classifiers.abstract import AbstractClassifier
 
 class LinearRegression(AbstractClassifier):
     def __init__(self, train_dataset, test_dataset, **kwargs):
-        super(LinearRegression, self).__init__(train_dataset, test_dataset)
+        super(LinearRegression, self).__init__(train_dataset, test_dataset, **kwargs)
 
         self.lr = BaseLinearRegression()
 
@@ -16,7 +16,7 @@ class LinearRegression(AbstractClassifier):
 
     def fit(self):
         self.lr.fit(self.train_dataset.x, self.train_dataset.y)
-        yield 1
+        yield 0
 
     def predict(self):
         y_ = self.lr.predict(self.test_dataset.x)
