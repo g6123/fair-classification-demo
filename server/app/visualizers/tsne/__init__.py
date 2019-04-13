@@ -1,10 +1,11 @@
 import torch
 
+from app import settings
 from app.models.tsne import ParametricTSNE
 from app.models.utils import map_location
 from app.utils import relpath
 
-device = torch.device('cuda')
+device = torch.device(settings.DEVICE)
 
 
 def fit_transform(dataset, y_):

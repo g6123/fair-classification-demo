@@ -6,6 +6,7 @@ import websockets
 import numpy as np
 from sklearn.metrics import confusion_matrix
 
+from app import settings
 from app import actions
 from app.datasets import datasets
 from app.methods import methods
@@ -58,7 +59,7 @@ async def handle(ws, path):
             await send_message(actions.set_error("Unknown action type"))
 
 
-serve = websockets.serve(handle, 'localhost', 9000)
+serve = websockets.serve(handle, settings.HOST, settings.PORT)
 
 asyncio.get_event_loop().run_until_complete(serve)
 asyncio.get_event_loop().run_forever()

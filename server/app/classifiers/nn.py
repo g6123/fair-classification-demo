@@ -1,11 +1,12 @@
 import torch
 from torch.utils.data import DataLoader
 
+from app import settings
 from app.classifiers.abstract import AbstractClassifier
 from app.datasets.reshape import ReshapeDataset
 from app.models.classifier import Classifier
 
-device = torch.device('cuda')
+device = torch.device(settings.DEVICE)
 
 
 class NeuralNetwork(AbstractClassifier):
