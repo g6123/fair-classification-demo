@@ -34,4 +34,7 @@ def set_progress(current, total, message=""):
 
 
 def set_error(message):
-    return {'type': 'SET_ERROR', 'message': message}
+    return {
+        'type': 'SET_ERROR',
+        'message': message,
+    }

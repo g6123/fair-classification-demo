@@ -9,7 +9,7 @@ device = torch.device('cuda')
 
 def fit_transform(dataset, y_):
     model = ParametricTSNE(dataset.x.shape[1], 128, 2).to(device)
-    model.load_state_dict(torch.load(relpath(__file__, "{}.pth".format(dataset.name)), map_location=map_location))
+    model.load_state_dict(torch.load(relpath(__file__, f"{dataset.name}.pth"), map_location=map_location))
 
     with torch.no_grad():
         model.eval()
