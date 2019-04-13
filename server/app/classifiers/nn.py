@@ -30,14 +30,14 @@ class NeuralNetwork(AbstractClassifier):
         for epoch in range(self._epochs):
             self._model.train()
 
-            for input, target in loader:
+            for x, y, _ in loader:
                 self._optimizer.zero_grad()
 
-                input = input.to(device).float()
-                target = target.to(device)
-                output = self._model(input)
+                x = x.to(device).float()
+                y = y.to(device)
+                y_ = self._model(x)
 
-                loss = self._compute_loss(output, target)
+                loss = self._compute_loss(y_, y)
 
                 loss.backward()
                 self._optimizer.step()
@@ -50,7 +50,7 @@ class NeuralNetwork(AbstractClassifier):
         with torch.no_grad():
             self._model.eval()
 
-            x, _ = next(iter(loader))
+            x, _, _ = next(iter(loader))
             x = x.to(device).float()
 
             y_ = self._model(x).exp()

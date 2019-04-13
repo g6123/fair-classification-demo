@@ -14,13 +14,13 @@ def set_dataset(dataset):
     }
 
 
-def set_points(y, y_, z, ilocs):
+def set_points(y, y_, z, locs):
     return {
         'type': 'SET_POINTS',
         'grounds': y.tolist(),
         'predictions': y_.tolist(),
         'positions': z.tolist(),
-        'reports': {k: confusion_matrix(y[v], y_[v]).tolist() for k, v in ilocs.items()},
+        'reports': {k: confusion_matrix(y[v], y_[v]).tolist() for k, v in locs.items()},
     }
 
 

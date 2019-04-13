@@ -9,13 +9,13 @@ class ReshapeDataset(Dataset):
         self.new_shape = new_shape
 
     def __getitem__(self, index):
-        input, target = self.dataset[index]
+        x, *xs = self.dataset[index]
 
-        new_input = np.zeros(np.prod(self.new_shape))
-        new_input[:np.prod(input.shape)] = np.reshape(input, (-1,))
-        new_input = np.reshape(new_input, self.new_shape)
+        x_ = np.zeros(np.prod(self.new_shape))
+        x_[:np.prod(x.shape)] = np.reshape(x, (-1,))
+        x_ = np.reshape(x_, self.new_shape)
 
-        return new_input, target
+        return (x_, *xs)
 
     def __len__(self):
         return len(self.dataset)

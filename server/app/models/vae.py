@@ -1,3 +1,4 @@
+import torch
 from torch.nn import Linear, Module, ReLU
 from torch.nn import functional as F
 
@@ -10,8 +11,9 @@ class VAE(Module):
         self.dense2 = Linear(dim_h, dim_h)
         self.dense3_1 = Linear(dim_h, dim_z)
         self.dense3_2 = Linear(dim_h, dim_z)
-        self.dense4 = Linear(dim_x, dim_h)
+        self.dense4 = Linear(dim_z, dim_h)
         self.dense5 = Linear(dim_h, dim_h)
+        self.dense6 = Linear(dim_h, dim_x)
 
     def encode(self, x):
         x = self.dense1(x)
@@ -35,6 +37,7 @@ class VAE(Module):
         x = F.relu(x)
         x = self.dense5(x)
         x = F.relu(x)
+        x = self.dense6(x)
 
         return x
 
@@ -43,4 +46,4 @@ class VAE(Module):
         z = self.sample(mean, log_var)
         x_ = self.decode(z)
 
-        return x
+        return x, mean, log_var

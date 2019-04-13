@@ -50,7 +50,7 @@ class AdultDataset(Dataset):
         self.x = self.x_all[iloc]
         self.y = self.y_all[iloc]
         self.a = self.a_all[iloc]
-        self.ilocs = {value_a: self.a == value_a for value_a in self.index_a}
+        self.locs = {k: self.a == i for i, k in enumerate(self.index_a)}
 
     def __getitem__(self, index):
         return self.x[index], self.y[index], self.a[index]

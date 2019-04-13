@@ -15,5 +15,5 @@ def Classifier():
         Linear(32 * 5 * 4, 32),
         ReLU(),
         Linear(32, 2),
-        LogSoftmax(dim=1)
+        LogSoftmax(dim=1),
     )
