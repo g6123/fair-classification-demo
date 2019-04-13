@@ -5,7 +5,7 @@ from ordered_set import OrderedSet
 import torch
 from torch.utils.data.dataset import Dataset
 
-from app.datasets.utils import read_uci_names, read_uci_data, to_ilocs
+from app.datasets.utils import read_uci_names, read_uci_data
 from app.utils import relpath, scale
 
 
@@ -31,8 +31,11 @@ class AdultDataset(Dataset):
     x_all = x_all.values.astype(np.float)
     x_all = scale(x_all, fit_to=x_all[iloc_train])
 
+    a_all = df_all[col_a]
+    a_all, index_a = pd.factorize(a_all)
+
     y_all = df_all[col_y]
-    y_all, _ = pd.factorize(y_all)
+    y_all, index_y = pd.factorize(y_all)
 
     def __init__(self, train=True, test=True):
         iloc = np.copy(self.iloc_all)
@@ -46,10 +49,11 @@ class AdultDataset(Dataset):
         self.df = self.df_all.iloc[iloc]
         self.x = self.x_all[iloc]
         self.y = self.y_all[iloc]
-        self.ilocs = to_ilocs(self.df_all.iloc[iloc][self.col_a])
+        self.a = self.a_all[iloc]
+        self.ilocs = {value_a: self.a == value_a for value_a in self.index_a}
 
     def __getitem__(self, index):
-        return self.x[index], self.y[index]
+        return self.x[index], self.y[index], self.a[index]
 
     def __len__(self):
         return len(self.x)

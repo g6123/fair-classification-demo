@@ -58,15 +58,6 @@ def read_uci_data(*filenames, **kwargs):
     return dfs
 
 
-def to_ilocs(series):
-    ilocs = {}
-
-    for value in series.unique():
-        ilocs[value] = to_iloc(series == value)
-
-    return ilocs
-
-
 def to_iloc(loc):
     return np.arange(len(loc))[loc]
 
