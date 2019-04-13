@@ -27,6 +27,6 @@ def run(train_dataset, test_dataset, visualizer, action):
         y_ = np.argmax(y_, axis=1)
 
         yield actions.set_points(y, y_, z_, test_dataset.ilocs)
-        yield actions.set_progress(epoch, epochs, '분류 중')
+        yield actions.set_progress(epoch, epochs, "Classifying...")
 
-    yield actions.set_progress(epochs, epochs, '완료')
+    yield actions.set_progress(epochs, epochs, "Done")
